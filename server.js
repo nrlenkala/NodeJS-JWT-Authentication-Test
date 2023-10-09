@@ -41,25 +41,28 @@ app.post('/api/login', (req, res) => {
 
     for (let user of users) {
         if (username == user.username && password == user.password) {
-            let token = jwt.sign({ id: user.id, username: user.username }, secretKey, {expiresIn :'180s'});
-            res.json({
-                success: true,
-                err: null,
-                token
-            });
+            token = jwt.sign({ id: user.id, username: user.username }, secretKey, { expiresIn: '180s' });
             break;
         }
-        else {
-            res.status(401).json({
-                success: false,
-                token: null,
-                err: 'Username or password is incorrect'
-            });
-        }
+    }
+    if (token) {
+        res.json({
+            success: true,
+            err: null,
+            token
+        });
+    }
+    else {
+        res.status(401).json({
+            success: false,
+            token: null,
+            err: 'Username or password is incorrect'
+        });
     }
 });
 
 app.get('/api/dashboard', jwtMW , (req, res) => {
+    console.log(req);
     res.json({
         success: true,
         myContent:'Secret content that only logged in people can see.'
@@ -67,6 +70,7 @@ app.get('/api/dashboard', jwtMW , (req, res) => {
 });
 
 app.get('/api/settings', jwtMW , (req, res) => {
+    console.log(req);
     res.json({
         success: true,
         myContent:'Following Settings'
@@ -93,3 +97,5 @@ app.use(function (err, req, res, next) {
 app.listen(PORT, () => {
     console.log(`Serving on port ${PORT}`);
 });
+
+

@@ -93,22 +93,22 @@
         }
 
         function onLoad() {
-            const token = localStorage.getItem('jwt');
+            const jwt = localStorage.getItem('jwt');
 
-            if (token) {
+            if (jwt) {
                 const jwtPayload = JSON.parse(atob(jwt.split('.')[1]));
                 const expirationTimeInMilliseconds = jwtPayload.exp * 1000;
 
                 const currentTimeInMilliseconds = Date.now();
                 if (currentTimeInMilliseconds >= expirationTimeInMilliseconds) {
-                    localStorage.removeItem('jwt');
-                    window.location.href = '/';
+                    localStorage.removeItem('jwt')
+                    window.location.href = '/'
                     clearInterval(intervalId);
                 }
             }
         }
         const intervalId = setInterval(onLoad, 5000);
-    </script>
 
+ </script>
 </body>
 </html>
